@@ -4,7 +4,7 @@ from requests_oauthlib import OAuth2Session
 
 OAUTH2_CLIENT_ID = os.environ['OAUTH2_CLIENT_ID']
 OAUTH2_CLIENT_SECRET = os.environ['OAUTH2_CLIENT_SECRET']
-OAUTH2_REDIRECT_URI = 'http://localhost:5000/callback'
+OAUTH2_REDIRECT_URI = 'http://discordapp.io:5000/callback'
 
 API_BASE_URL = os.environ.get('API_BASE_URL', 'https://discordapp.com/api')
 AUTHORIZATION_BASE_URL = API_BASE_URL + '/oauth2/authorize'
@@ -67,7 +67,9 @@ def me():
     user = discord.get(API_BASE_URL + '/users/@me').json()
     guilds = discord.get(API_BASE_URL + '/users/@me/guilds').json()
     connections = discord.get(API_BASE_URL + '/users/@me/connections').json()
-    return jsonify(user=user, guilds=guilds, connections=connections)
+    resp = jsonify(user=user, guilds=guilds, connections=connections)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp;
 
 
 if __name__ == '__main__':
