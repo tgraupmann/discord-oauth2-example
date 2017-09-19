@@ -63,12 +63,15 @@ def callback():
 
 @app.route('/me')
 def me():
+    print ("Headers:************");
+    print (request.headers);
     discord = make_session(token=session.get('oauth2_token'))
     user = discord.get(API_BASE_URL + '/users/@me').json()
     guilds = discord.get(API_BASE_URL + '/users/@me/guilds').json()
     connections = discord.get(API_BASE_URL + '/users/@me/connections').json()
     resp = jsonify(user=user, guilds=guilds, connections=connections)
-    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
+    resp.headers['Access-Control-Allow-Credentials'] = 'true'
     return resp;
 
 
